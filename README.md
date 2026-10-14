@@ -8,6 +8,7 @@ DSH（DeepSeek Harness）源码与开发者文档的查阅、拉取与开发规�
 - **官方文档的正确用法**：必读顺序（capability-seams → cordis-primer/cordis-api → config-catalog → …）与 `references/doc-map.md` 全量地图，按任务查该读哪篇。
 - **按版本拿源码和文档**：npm `@deepseek-ai/dsh` 版本 ↔ 仓库 tag `dsh-v<版本>`；单篇文档 raw URL 直取，或整棵参考检出。
 - **一键拉取/更新**：`scripts/refresh-dsh-reference.ps1` 解析版本 → clone/fetch tags → checkout 到对应 tag。
+- **Lab 平面实操**：`references/lab-testing.md` —— lab（3082）启动/判活/停止、本地 tarball 安装、浏览器冒烟、基线恢复、文档截图与常见陷阱的完整流程。
 
 ## 安装
 

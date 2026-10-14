@@ -102,7 +102,7 @@ git -C <目标目录> checkout --detach dsh-v<版本>
 ### 3.5 测试与验证规范
 
 - 单元测试覆盖纯函数与编排逻辑；**涉及 patch 的必须加"真实组合"测试**——用官方 `applyEntryPatches` + `entryListSchema` 对着随包 patch 文件跑，防止打包/版本因素让行为漂移（`!!js` 表达式要用 `entryListSchema` 解析）。
-- 运行时冒烟在 lab 平面做：改完 patch 先 `--dump-config` 看组合结果，再上会话验证；A/B（开/关插件）是归因官方问题与插件问题的唯一可靠手段。
+- 运行时冒烟在 lab 平面做：改完 patch 先 `--dump-config` 看组合结果，再上会话验证；A/B（开/关插件）是归因官方问题与插件问题的唯一可靠手段。完整操作（启动/判活/停止、插件安装、浏览器冒烟、基线恢复、截图、陷阱清单）见 **`references/lab-testing.md`**。
 - 反向验证习惯：把关键逻辑故意改坏 → 对应测试必须变红 → 恢复后变绿，证明测试真的在测它。
 
 ### 3.6 已知接缝陷阱（写 patch / 替换官方行之前先读）
@@ -132,4 +132,11 @@ curl.exe -s https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/dsh-v
 
 # 两版之间文档/实现改了什么（在参考检出里）
 git -C ~/.dsh/reference/deepseek-harness log --oneline dsh-v0.1.7-rc.2..dsh-v0.2.0-rc.2 -- docs packages
+
+# lab 平面启动（后台承载；成功标志 = 打印 dsh web: http://127.0.0.1:3082/?token=...）
+$env:DSH_HOME = "$env:USERPROFILE\.dsh-lab"; & "$env:APPDATA\npm\dsh.ps1" --profile lab --host 127.0.0.1 --port 3082 --no-open
+
+# lab 判活 / 停止（只认端口，不认后台 job 状态）
+Get-NetTCPConnection -LocalPort 3082 -State Listen -ErrorAction SilentlyContinue
+Stop-Process -Id (Get-NetTCPConnection -LocalPort 3082 -State Listen).OwningProcess -Force
 ```
